@@ -1,0 +1,23 @@
+#!/bin/bash
+#Convert to Josn format
+#usage  ./$0 filename
+
+if [ -e ./$1 -a -f ./$1 ];then
+        a=($(cut -d , -f 1 ./$1))
+        b=($(cut -d , -f 2 ./$1))
+        c=${#a[*]}
+        printf "{\n" ; printf "\t\"people\":[\n"
+
+        for ((i=0;i<c;i++))
+        do
+                if [ "$i" -eq "$((c-1))" ];then
+                        printf "\t\t{"\""Name"\"":"\""%s"\"","\""age"\"":"\""%s"\""}\n" ${a[i]} ${b[i]}
+                else
+                        printf "\t\t{"\""Name"\"":"\""%s"\"","\""age"\"":"\""%s"\""},\n" ${a[i]} ${b[i]}
+                fi
+        done
+        printf "\t]\n"
+        printf "}\n"
+else
+        echo "$1 not found"
+fi
