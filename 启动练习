@@ -1,1 +1,89 @@
+#!/usr/bin/env bash
 
+## 程序名称：           app_ctl.sh
+## 程序版本：           v1.0
+## 程序作者：           Yang
+## 程序用法：           app_cat.sh { -start | -stop | -startbglog | -startfglog | -startbg }
+## 程序历史：           v1.0
+##
+##
+
+## Set 设置
+#set -o nounset #set -u
+#set -o errexit #set -e
+#set -o xtrace  # set -x
+
+## Trap setting
+function fn_terminal_script {
+        echo "Program terminited. SIGINT caught."
+        #-----
+        exit
+}
+trap 'fn_terminal_script' SIGINT
+
+## Function list
+fn_log_info() { echo "$(date '+%D %T') [INFO] $*." | tee -a $LOG;}
+fn_log_error(){ echo "$(date '+%D %T') [ERROR] $1!" |tee -a $LOG ; exit;}
+fn_print_verion() { echo "$PN.sh v$VER"; }
+function fn_usage { echo "$PN.sh { -start | -stop | -startbglog | -startfglog | -startbg }" && exit;}
+fn_status(){
+        last_pid=$(ps -ef|grep "/app.sh$" |grep -v "grep"|awk '{print $2}'|head -n 1)
+        
+        if [[ -z $last_pid ]];then
+                STATUS=0
+        else
+                STATUS=10
+        fi
+}
+
+## Program information
+PP=$(cd $(dirname $0) && pwd)
+PN=$(basename $0 ".sh")
+VER=1.0
+LOG=$PP/$PN.log
+ERR=$PP/$PN.err
+
+## Environement setting
+export PATH=$PP:$PATH
+APP_PN=$(which app.sh)
+
+##  Main program
+case $1 in
+       -start) 
+                fn_status
+                [[ $STATUS -eq 10 ]] && fn_log_error "程序已经运行"
+                fn_log_info "程序版本：`fn_print_verion`"
+                fn_log_info "正在启动启动"
+                sleep 2
+                $APP_PN ;;
+        -stop) 
+                fn_status
+                [[ $STATUS -eq 0 ]] && fn_log_error "程序未运行"
+                fn_log_info "正在停止程序"
+                sleep 2
+                kill $last_pid
+                fn_log_info "程序已停止";;
+       -startbglog) 
+                fn_status
+                [[ $STATUS -eq 10 ]] && fn_log_error "程序正在运行"
+                fn_log_info "程序版本：`fn_print_verion`"
+                fn_log_info "正在启动程序"
+                sleep 2
+                nohup $APP_PN >> ${APP_PN}.log 2>&1 & 
+                fn_log_info "程序已经在后台运行";;
+       -startfglog) 
+                fn_status 
+                [[ $STATUS -eq 10 ]] && fn_log_error "程序正在运行"
+                fn_log_info "程序版本：`fn_print_verion`"
+                fn_log_info "正在启动程序"
+                sleep 2
+                $APP_PN | tee -a $APP_PN.log;;
+       -startbg) 
+                fn_status
+                [[ $STATUS -eq 10 ]] && fn_log_error "程序正在运行"
+                fn_log_info "程序版本：`fn_print_verion`"
+                fn_log_info "正在启动程序"
+                sleep 2
+                (nohup $APP_PN &) && echo "程序已经在后台运行";;
+       *) fn_usage ;;
+esac
