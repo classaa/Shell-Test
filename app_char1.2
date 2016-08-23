@@ -57,7 +57,7 @@ for((j=0;j<$NUM;j++))
 do
 	read -a a$j <./tmpfile.$j
 done
-bb=(A B C D E F G H I J K L M N O P Q R S T U V W S Y Z)
+bb=ABCDEFGHIJKLMNOPQRSTUVWSYZ
 for((z=0;z<26;z++))
 do
 	sum=0
@@ -66,5 +66,5 @@ do
 		aa=$(eval echo \${a$j[$z]})
 		sum=$[$aa+$sum]
 	done 
-	printf "%s:%d\n" "${bb[$z]}" "$sum"
+	printf "%s:%d\n" "${bb:$z:1}" "$sum"
 done
