@@ -63,7 +63,7 @@ tongji(){
 ## 参数判断· filename 为要统计的文件名，num为线程数
 [ -f "$1" ] && FILENAME=$1 || usage
 
-[ $2 -gt 0 ] >/dev/null 2>&1 && NUM=$2 || usage
+[ $2 -gt 0 ] && NUM=$2 || usage
 
 #文件的总行数
 HS=$(cat $FILENAME|wc -l)
