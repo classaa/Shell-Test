@@ -68,3 +68,4 @@ do
 	done 
 	printf "%s:%d\n" "${bb:$z:1}" "$sum"
 done
+find . -name "tmpfile.*" -a -type f -exec rm {} \;
