@@ -1,10 +1,10 @@
 #!/bin/bash
 ## 程序名称：           app_char2.sh
-## 程序版本：           v1.0
+## 程序版本：           v1.1
 ## 程序作者：           Yang
 ## 程序用法：           app_char.sh { filename } { number }
 ## 程序历史：
-## 程序功能：统计文档中英文字母的个数，不区分大小写
+## 程序功能：统计文档中英文字母的个数，区分大小写
 ##
 ##
 
@@ -53,7 +53,7 @@ do
         PID[$h]=$!
 done
 wait
-for((j=0;j<$2;j++))
+for((j=0;j<$NUM;j++))
 do
         read -a a$j <./tmpfile.$j
 done
@@ -64,7 +64,7 @@ bb=abcdefghijklmnopqrstuvwsyzABCDEFGHIJKLMNOPQRSTUVWSYZ
 for((z=0;z<52;z++))
 do
         sum=0
-        for((j=0;j<$2;j++))
+        for((j=0;j<$NUM;j++))
         do
                 aa=$(eval echo \${a$j[$z]})
                 sum=$[$aa + $sum]
