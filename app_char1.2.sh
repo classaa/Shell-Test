@@ -29,8 +29,7 @@ tongji(){
 	awk 'BEGIN{ FS="" } 
 	NR>'$min' && NR<='$max'{for(i=1;i<=NF;i++)
 	{
-                if($i>="a" && $i<="z") {list[$i]++;continue}
-                if($i>="A" && $i<="Z") list[$i]++
+                if($i>="A" && $i<="z")list[$i]++
         }
         };END{for(j=97;j<=122;j++){a=sprintf("%c",j);b=sprintf("%c",j-32);printf("%d\t",list[a]+list[b])}}' $1
 }
