@@ -16,7 +16,7 @@
 ## Program information
 PP=$(cd $(dirname $0) && pwd)
 PN=$(basename $0 ".sh")
-VER=1.0
+VER=1.5
 #TMPFILE=$PP/$PN.log
 
 ## Function list
